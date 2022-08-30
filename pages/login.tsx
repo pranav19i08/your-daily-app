@@ -13,59 +13,100 @@ import {
 } from "@mui/material";
 
 
-import logo from "/Users/pranavmishra/your-daily-app/pages/images/Wihite BG horizontal.png";
+
+import Image from "next/image";
+import api from "./api/api";
+import { NextRouter, useRouter } from "next/router";
+import { useState } from "react";
 
 
-const Login = () => {
+  const Login = () => {
+  const [state, setState] = useState({ username: " ", password: " " });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const router = useRouter();
+
+  async function fetchUser(
+    username: string,
+    password: string,
+
+    router: NextRouter
+  ) 
+  {
+    try {
+      const rest = await api.post("api/sm-login", {
+        email: username,
+        password: password,
+      });
+
+      if (rest.status == 200) {
+        const authToken = rest.data.Authorization;
+        localStorage.setItem("authToken", authToken);
+        console.log(authToken);
+        router.push({
+        pathname: "/dashBoard",
+        query: {
+            category: "all",
+          },
+        });
+      }
+    } catch (error: any) {
+      console.log("error");
+    }
+  }
 
   return (
-    <Box 
-      height="100vh"
+    <Box
+      minHeight="100vh"
       sx={{
         background: "#ffcdca",
-        height: "100vh",
       }}
     >
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item sm={12}>
-          <div>
-            <Toolbar
-              sx={{
-                marginLeft: "100px",
-                marginTop: "24px",
-              }}
-            >
-              <Image src={logo} alt="logo" />
-            </Toolbar>
+          <div className="logo">
+            <Image src="/images/logo.png" alt="logo" width={288} height={106} />
           </div>
         </Grid>
 
-        <Grid item sm={8}>
+        <Grid sm={6}>
+          <Toolbar
+            sx={{
+              marginLeft: "100px",
+              marginTop: "24px",
+            }}
+          >
+            <Image
+              src="/images/bgImage.png"
+              alt="bgImage"
+              height={507}
+              width={725}
+            />
+          </Toolbar>
+        </Grid>
+
+        <Grid item sm={5}>
           <Toolbar
             sx={{
               height: "500px",
             }}
-          >
-          <Image src={loginimg} alt="login" className={styles.logoImg} />
-          </Toolbar>
+          ></Toolbar>
         </Grid>
-        <Grid item sm={4}>
-          <div className={styles.logincard}>
-            <Box
-            >
+
+        <Grid item sm={5}>
+          <div>
+            <Box>
               <Paper
-                elevation={3}
+                elevation={5}
                 sx={{
-                  
-                  paddingLeft: "35px",
-                  marginTop: "70px",
-                  height: "418px",
-                  width: "400px",
+                  marginLeft: "55rem",
+                  marginTop: "-460px",
+                  height: "380px",
+                  width: "345px",
                   backgroundColor: "white",
                 }}
               >
-
-                < Typography
+                <Typography
                   variant="h4"
                   align="left"
                   sx={{
@@ -80,14 +121,10 @@ const Login = () => {
                   align="left"
                   sx={{ marginLeft: "30px", marginBottom: "30px" }}
                 >
-                Please login to your account
+                  Please login to your account
                 </Typography>
 
-                <FormControl
-                  sx={{ m: 1, width: "25ch" }}
-                  variant="outlined"
-                 
-                >
+                <FormControl sx={{ m: 1, width: "17rem" }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     User Id
                   </InputLabel>
@@ -95,11 +132,16 @@ const Login = () => {
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
-                          // aria-label="toggle password visibility"
+                         aria-label="toggle password visibility"
 
                           edge="end"
                         >
-                          <Image src={iconuser} alt="login" />
+                          <Image
+                            src="/images/iconuser.png"
+                            alt="icon"
+                            height={20}
+                            width={24}
+                          />
                         </IconButton>
                       </InputAdornment>
                     }
@@ -107,27 +149,26 @@ const Login = () => {
                   />
                 </FormControl>
 
-                <FormControl
-                  sx={{ m: 1, width: "25ch" }}
-                  variant="outlined"
-                
-                >
+                <FormControl sx={{ m: 1, width: "17rem" }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-password"
                     type="password"
-                    
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
                           edge="end"
                         >
-                          <Image src={iconpassword} alt="login" />
-
-                        {/* <Visibility/> */}
+                          <Image
+                            src="/images/passcode.png"
+                            alt="icon"
+                            height={20}
+                            width={24}
+                          />
+                          {/* <Visibility/> */}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -137,13 +178,16 @@ const Login = () => {
 
                 <Button
                   variant="contained"
-                  onClick={clickHandler}
                   sx={{
+                    marginLeft: "1.5%",
                     width: "80%",
                     height: "12%",
                     marginBottom: "20px",
                     backgroundColor: "#F88A12",
                   }}
+                  // onClick={async () => {
+                  //   await fetchUser(state.username, state.password, router);
+                  // }}
                 >
                   Log In
                 </Button>
@@ -153,6 +197,7 @@ const Login = () => {
                   align="right"
                   sx={{
                     marginRight: "10%",
+                    color: "#F88A12",
                   }}
                 >
                   Forgot Password?
@@ -167,4 +212,3 @@ const Login = () => {
 };
 
 export default Login;
-
