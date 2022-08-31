@@ -6,31 +6,20 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Image from "next/image";
-import Additems from "../components/Additems"
+import Additems from "../components/Additems";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
-import DataTable from "../components/Table";
-import 
-{ 
-  Grid, 
-  Tabs, 
-  Tab, 
-  Table, 
-}
-  from "@mui/material";
-
-
+import DataTable, { FetchData } from "../components/Table";
+import { Grid, Tabs, Tab, Table } from "@mui/material";
 import { useState } from "react";
 import router from "next/router";
 
-
-const Dashboard = () => {
+const DashBoard = () => {
   const [showAdd, setShowAdd] = useState(false);
-  // const { items, setItems } = FetchData();
-  
-  return (
+  const { items, setItems } = FetchData();
 
-    <Box sx={{ flexGrow: 1, backgroundColor: "#F88A124D", height: "100vh" }}>
+  return (
+    <Box sx={{ flexGrow: 1, backgroundColor: "#F88A1240" }}>
       <AppBar position="static" sx={{ backgroundColor: "#F88A12" }}>
         <Toolbar>
           <Image
@@ -44,7 +33,7 @@ const Dashboard = () => {
           </Typography>
 
           <IconButton>
-            <PersonAddAltIcon sx={{ marginRight: "50px", color: "#ffffff" }} />
+            <PersonAddAltIcon sx={{ marginRight: "5px", color: "#ffffff" }} />
           </IconButton>
           <IconButton>
             <LogoutIcon
@@ -67,9 +56,9 @@ const Dashboard = () => {
             color="inherit"
             sx={{ color: "#F88A12", margin: "30px", fontWeight: "bold" }}
             onClick={() => {
-                router.push({
-                  pathname: "/login",
-                });
+              router.push({
+                pathname: "/login",
+              });
             }}
           >
             back
@@ -93,7 +82,7 @@ const Dashboard = () => {
       <Grid
         container
         spacing={2}
-        sx={{ margin: "0", width: "50%", justifyContent: "center" }}
+        sx={{ margin: "0", width: "100%", justifyContent: "center" }}
       >
         <Tabs aria-label="basic tabs example">
           <Tab
@@ -127,17 +116,12 @@ const Dashboard = () => {
           <col style={{ width: "10%" }} />
           <col style={{ width: "10%" }} />
         </colgroup>
-        </Table>
+      </Table>
 
-      < DataTable items={undefined} setItems={undefined} />
-      < Additems
-        showAdd={showAdd}
-        setShowAdd={setShowAdd}
-        setItems={undefined}
-      />
+      <DataTable items={items} setItems={setItems} />
+      <Additems showAdd={showAdd} setShowAdd={setShowAdd} setItems={setItems} />
     </Box>
   );
 };
 
-export default Dashboard;
-
+export default DashBoard;

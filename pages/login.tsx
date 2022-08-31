@@ -1,27 +1,26 @@
-import { Box, Toolbar } from "@mui/material";
-import * as React from "react";
+import { Person, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box } from "@mui/system";
+import TextField from "@mui/material/TextField";
+import React, { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { NextRouter } from "next/router";
+import api from "./api/api";
 import {
   Grid,
+  Toolbar,
+  Paper,
   Typography,
+  FormControl,
+  IconButton,
   Button,
   InputAdornment,
-  OutlinedInput,
-  FormControl,
-  InputLabel,
-  IconButton,
-  Paper,
+  AlertColor,
 } from "@mui/material";
+// import CustomizedSnackbar from "../shared/components/customizedSnackbar";
 
-
-
-import Image from "next/image";
-import api from "./api/api";
-import { NextRouter, useRouter } from "next/router";
-import { useState } from "react";
-
-
-  const Login = () => {
-  const [state, setState] = useState({ username: " ", password: " " });
+const Login = () => {
+  const [state, setState] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const router = useRouter();
@@ -31,8 +30,7 @@ import { useState } from "react";
     password: string,
 
     router: NextRouter
-  ) 
-  {
+  ) {
     try {
       const rest = await api.post("api/sm-login", {
         email: username,
@@ -44,9 +42,9 @@ import { useState } from "react";
         localStorage.setItem("authToken", authToken);
         console.log(authToken);
         router.push({
-        pathname: "/dashBoard",
-        query: {
-            category: "all",
+          pathname: "/dashBoard",
+          query: {
+            category: "allItems",
           },
         });
       }
@@ -56,53 +54,43 @@ import { useState } from "react";
   }
 
   return (
-    <Box
-      minHeight="100vh"
-      sx={{
-        background: "#ffcdca",
-      }}
-    >
+    <Box minHeight="100vh" sx={{ background: "#ffcdca" }}>
       <Grid container>
         <Grid item sm={12}>
-          <div className="logo">
-            <Image src="/images/logo.png" alt="logo" width={288} height={106} />
-          </div>
-        </Grid>
-
-        <Grid sm={6}>
           <Toolbar
             sx={{
               marginLeft: "100px",
               marginTop: "24px",
             }}
           >
-            <Image
-              src="/images/bgImage.png"
-              alt="bgImage"
-              height={507}
-              width={725}
-            />
+            <Image src="/images/logo.png" alt="logo" width={288} height={106} />
           </Toolbar>
         </Grid>
-
-        <Grid item sm={5}>
-          <Toolbar
-            sx={{
-              height: "500px",
-            }}
-          ></Toolbar>
+        <Grid item sm={7}>
+          <>
+            <Toolbar sx={{ marginTop: "90px", marginLeft: "165px" }}>
+              <Image
+                src="/images/BgImage.png"
+                alt="backgroundImage"
+                width={725}
+                height={507}
+              />
+            </Toolbar>
+          </>
         </Grid>
-
-        <Grid item sm={5}>
-          <div>
+        <Grid item sm={4}>
+          <>
             <Box>
               <Paper
-                elevation={5}
+                elevation={3}
                 sx={{
-                  marginLeft: "55rem",
-                  marginTop: "-460px",
-                  height: "380px",
-                  width: "345px",
+                  marginLeft: "40px",
+                  padding: "30px",
+                  paddingRight:"0",
+                  paddingLeft:"35px",
+                  marginTop: "35px",
+                  height: "418px",
+                  width: "400px",
                   backgroundColor: "white",
                 }}
               >
@@ -111,7 +99,7 @@ import { useState } from "react";
                   align="left"
                   sx={{
                     marginTop: "30px",
-                    marginLeft: "30px",
+                    marginLeft: "10px",
                   }}
                 >
                   Log In
@@ -119,79 +107,86 @@ import { useState } from "react";
                 <Typography
                   variant="h6"
                   align="left"
-                  sx={{ marginLeft: "30px", marginBottom: "30px" }}
+                  sx={{ marginLeft: "10px", marginBottom: "30px" }}
                 >
                   Please login to your account
                 </Typography>
 
-                <FormControl sx={{ m: 1, width: "17rem" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    User Id
-                  </InputLabel>
-                  <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                         aria-label="toggle password visibility"
+                <FormControl
+                  variant="outlined"
+                  sx={{
+                    width: "80%",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <TextField
+                    label="UserName"
+                    color="secondary"
+                    placeholder="enter your user id"
+                    onChange={(e) => {
+                      setState({ ...state, username: e.target.value });
 
-                          edge="end"
-                        >
-                          <Image
-                            src="/images/iconuser.png"
-                            alt="icon"
-                            height={20}
-                            width={24}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
+                      console.log(e.target.value);
+                    }}
+                    value={state.username}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Person />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </FormControl>
 
-                <FormControl sx={{ m: 1, width: "17rem" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-password"
-                    type="password"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          edge="end"
-                        >
-                          <Image
-                            src="/images/passcode.png"
-                            alt="icon"
-                            height={20}
-                            width={24}
-                          />
-                          {/* <Visibility/> */}
-                        </IconButton>
-                      </InputAdornment>
-                    }
+                <FormControl
+                  variant="outlined"
+                  sx={{
+                    width: "80%",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <TextField
                     label="Password"
+                    color="secondary"
+                    placeholder="enter your password"
+                    onChange={(e) => {
+                      setState({ ...state, password: e.target.value });
+                      console.log(e.target.value);
+                    }}
+                    type={showPassword ? "text" : "password"}
+                    value={state.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </FormControl>
 
                 <Button
-                  variant="contained"
                   sx={{
-                    marginLeft: "1.5%",
                     width: "80%",
-                    height: "12%",
+                    height: "10%",
                     marginBottom: "20px",
                     backgroundColor: "#F88A12",
                   }}
-                  // onClick={async () => {
-                  //   await fetchUser(state.username, state.password, router);
-                  // }}
+                  onClick={ async () => {
+                    setShowSnackbar(!showSnackbar);
+
+                    await fetchUser(state.username, state.password, router);
+                  }}
                 >
-                  Log In
+                  Login
                 </Button>
-                <br />
+                {/* <CustomizedSnackbar showSnackbar={showSnackbar} /> */}
                 <Typography
                   variant="body1"
                   align="right"
@@ -204,7 +199,7 @@ import { useState } from "react";
                 </Typography>
               </Paper>
             </Box>
-          </div>
+          </>
         </Grid>
       </Grid>
     </Box>

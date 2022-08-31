@@ -1,17 +1,13 @@
 import CssBaseline from "@mui/material/CssBaseline";
-import * as React from "react";
-
+import "../styles/global.css";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-     <React.Fragment>
-    <CssBaseline/>
+      <CssBaseline />
       <Component {...pageProps} />
-      </React.Fragment>
     </>
   );
 }
 
 export default MyApp;
-

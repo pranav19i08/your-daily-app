@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import router, { NextRouter, useRouter } from "next/router";
 import { AlertColor } from "@mui/material";
 import api from "../pages/api/api";
+import { ShowItems } from "./Showitems";
 // import customizedSnackbar from "./customizedSnackbar";
 
 export const FetchData = () => {
@@ -77,13 +78,13 @@ export default function BasicTable({
     borderBottomColor: "white",
   });
 
-  //   const MyTableCell = styled(TableCell)({
-  //     borderBottomColor: "white",
-  //   });
+  // const MyTableCell = styled(TableCell)({
+  //   borderBottomColor: "white",
+  // });
 
   return (
     <>
-      <TableContainer sx={{ mt: 3, width: "100%" }}>
+      <TableContainer sx={{ width: "100vw", flexGrow: 1 }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -100,10 +101,24 @@ export default function BasicTable({
             </TableRow>
           </TableHead>
           <TableBody>
+            {items?.map(
+              (item: itemType) =>
+                (tabValue == "allItems" ||
+                  (tabValue == "others" && item.categoryID > 2) ||
+                  (tabValue == "vegetables" && item.categoryID == 1) ||
+                  (tabValue == "fruits" && item.categoryID == 2)) && (
+                  <ShowItems
+                    key={item.id}
+                    item={item}
+                    setItems={setItems}
+                    showEdit={showEdit}
+                    setShowEdit={setShowEdit}
+                  />
+                )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
-      
     </>
   );
 }
